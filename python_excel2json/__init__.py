@@ -3,6 +3,11 @@ from .main import (
 )
 
 
+authorized_types = {
+    'int': int, 'float': float, 'str': str
+}
+
+
 def parse_excel_to_json(
     excel_sheets_format, filename=None, file_contents=None
 ):
@@ -15,12 +20,42 @@ def parse_excel_to_json(
         'sheet_formats': [
             {
                 'sheet_index': 0,
-                'column_names': ['name1', 'name2', 'name3'],
+                'column_names': [
+                    {
+                        'name': 'name1',
+                        'type': 'str'
+                    },
+                    {
+                        'name': 'name2',
+                        'type': 'str'
+                    },
+                    {
+                        'name': 'name3',
+                        'type': 'str'
+                    }
+                ],
                 'is_ordered': True
             },
             {
                 'sheet_index': 1,
-                'column_names': ['name1', 'name2', 'name3', 'name4'],
+                'column_names': [
+                    {
+                        'name': 'name1',
+                        'type': 'str'
+                    },
+                    {
+                        'name': 'name2',
+                        'type': 'str'
+                    },
+                    {
+                        'name': 'name3',
+                        'type': 'str'
+                    },
+                    {
+                        'name': 'name4',
+                        'type': 'str'
+                    }
+                ],
                 'is_ordered': True
             }
         ]
@@ -84,9 +119,17 @@ def parse_excel_to_json(
                 for column_position_in_sheet in range(
                     start_column_sheet_parsing, total_number_of_columns
                 ):
-                    row_parsed_dict[sheet_format.get('column_names')[
+                    column_dict = sheet_format.get('column_names')[
                         column_position_in_column_names
-                    ]] = sheet.row(row_object)[column_position_in_sheet].value
+                    ]
+                    sheet_column_name = column_dict.get('name')
+                    sheet_column_value = str(
+                        sheet.row(row_object)[column_position_in_sheet].value
+                    )
+                    sheet_column_type = column_dict.get('type')
+                    row_parsed_dict[sheet_column_name] = (
+                        authorized_types[sheet_column_type](sheet_column_value)
+                    )
 
                     column_position_in_column_names += 1
                 sheet_parsed_list.append(row_parsed_dict)
