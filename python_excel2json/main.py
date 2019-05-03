@@ -66,7 +66,7 @@ def find_format_of_columns_from_specific_index_sheet(
 
 
 def get_expected_value(value, expected_type):
-    if type(value) == float:
+    if type(value) == float and expected_type == 'str':
         value = str(value).replace('.0', '')
 
     value = authorized_types[expected_type](value) if value else value
