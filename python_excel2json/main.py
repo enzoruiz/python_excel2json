@@ -4,6 +4,10 @@ from xlrd import open_workbook
 DEFAULT_START_ROW_EXCEL_PARSING = 1
 DEFAULT_START_COLUMN_EXCEL_PARSING = 0
 
+authorized_types = {
+    'int': int, 'float': float, 'str': str
+}
+
 
 def get_book_from_input_file(filename=None, file_contents=None):
     if not filename and not file_contents:
@@ -59,3 +63,12 @@ def find_format_of_columns_from_specific_index_sheet(
         column_format_found, start_row_sheet_parsing,
         start_column_sheet_parsing
     )
+
+
+def get_expected_value(value, expected_type):
+    if type(value) == float:
+        value = str(value).replace('.0', '')
+
+    value = authorized_types[expected_type](value) if value else value
+
+    return value

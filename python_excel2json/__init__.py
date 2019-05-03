@@ -1,11 +1,7 @@
 from .main import (
-    get_book_from_input_file, find_format_of_columns_from_specific_index_sheet
+    get_book_from_input_file, find_format_of_columns_from_specific_index_sheet,
+    get_expected_value
 )
-
-
-authorized_types = {
-    'int': int, 'float': float, 'str': str
-}
 
 
 def parse_excel_to_json(
@@ -32,6 +28,10 @@ def parse_excel_to_json(
                     {
                         'name': 'name3',
                         'type': 'str'
+                    },
+                    {
+                        'name': 'name4',
+                        'type': 'float'
                     }
                 ],
                 'is_ordered': True
@@ -53,7 +53,7 @@ def parse_excel_to_json(
                     },
                     {
                         'name': 'name4',
-                        'type': 'str'
+                        'type': 'float'
                     }
                 ],
                 'is_ordered': True
@@ -123,12 +123,12 @@ def parse_excel_to_json(
                         column_position_in_column_names
                     ]
                     sheet_column_name = column_dict.get('name')
-                    sheet_column_value = str(
+                    sheet_column_value = (
                         sheet.row(row_object)[column_position_in_sheet].value
                     )
                     sheet_column_type = column_dict.get('type')
-                    row_parsed_dict[sheet_column_name] = (
-                        authorized_types[sheet_column_type](sheet_column_value)
+                    row_parsed_dict[sheet_column_name] = get_expected_value(
+                        sheet_column_value, sheet_column_type
                     )
 
                     column_position_in_column_names += 1
