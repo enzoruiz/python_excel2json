@@ -52,5 +52,9 @@ def parse_excel_to_json(
             excel_parsed_list.append(parsed_object)
     except IndexError:
         raise Exception('Not enough data to parse the sheets from excel.')
+    except ValueError:
+        raise Exception(
+            'Some fields can not be converted to the value you want.'
+        )
 
     return excel_parsed_list
